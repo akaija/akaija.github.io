@@ -1,2 +1,1 @@
-# Alec
-# Kaija
+# More coming soon!
