@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  
+
+  <title>Scripting in Blender-2.8 - akaija.github.io</title>
+  <link rel="stylesheet" href="http://localhost:4000/assets/css/just-the-docs.css">
+
+  
+
+  
+    <script type="text/javascript" src="http://localhost:4000/assets/js/vendor/lunr.min.js"></script>
+  
+  <script type="text/javascript" src="http://localhost:4000/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <div class="page-wrap">
+    <div class="side-bar">
+      <a href="http://localhost:4000" class="site-title fs-6 lh-tight">akaija.github.io</a>
+      <span class="fs-3"><button class="js-main-nav-trigger navigation-list-toggle btn btn-outline" type="button" data-text-toggle="Hide">Menu</button></span>
+      <div class="navigation main-nav js-main-nav">
+        <nav role="navigation" aria-label="Main navigation">
+  <ul class="navigation-list">
+    
+    
+      
+        
+          <li class="navigation-list-item">
+            
+            <a href="http://localhost:4000/" class="navigation-list-link">Home</a>
+            
+          </li>
+        
+      
+    
+      
+        
+          <li class="navigation-list-item active">
+            
+            <a href="http://localhost:4000/scripting_in_blender.html" class="navigation-list-link active">Scripting in Blender-2.8</a>
+            
+          </li>
+        
+      
+    
+  </ul>
+</nav>
+
+      </div>
+      <footer role="contentinfo" class="site-footer">
+        <p class="text-small text-grey-dk-000 mb-0">This site uses <a href="https://github.com/pmarsceill/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.</p>
+      </footer>
+    </div>
+    <div class="main-content-wrap js-main-content" tabindex="0">
+      <div class="page-header">
+        <div class="main-content">
+          
+          <div class="search js-search">
+            <div class="search-input-wrap">
+              <input type="text" class="js-search-input search-input" tabindex="0" placeholder="Search akaija.github.io" aria-label="Search akaija.github.io" autocomplete="off">
+              <svg width="14" height="14" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" class="search-icon"><title>Search</title><g fill-rule="nonzero"><path d="M17.332 20.735c-5.537 0-10-4.6-10-10.247 0-5.646 4.463-10.247 10-10.247 5.536 0 10 4.601 10 10.247s-4.464 10.247-10 10.247zm0-4c3.3 0 6-2.783 6-6.247 0-3.463-2.7-6.247-6-6.247s-6 2.784-6 6.247c0 3.464 2.7 6.247 6 6.247z"/><path d="M11.672 13.791L.192 25.271 3.02 28.1 14.5 16.62z"/></g></svg>
+            </div>
+            <div class="js-search-results search-results-wrap"></div>
+          </div>
+          
+          
+        </div>
+      </div>
+      <div class="main-content">
+        
+          
+        
+        <div id="main-content" class="page-content" role="main">
+          <h1 class="no_toc" id="scripting-in-blender-28">Scripting in Blender-2.8</h1>
+
+<h2 class="no_toc text-delta" id="table-of-contents">Table of contents</h2>
+
+<ol id="markdown-toc">
+  <li><a href="#getting-started" id="markdown-toc-getting-started">Getting started</a></li>
+  <li><a href="#the-bpy-module" id="markdown-toc-the-bpy-module">The <code class="highlighter-rouge">bpy</code> module</a></li>
+  <li><a href="#the-mathutils-module" id="markdown-toc-the-mathutils-module">The <code class="highlighter-rouge">mathutils</code> module</a></li>
+  <li><a href="#adding-a-uv-sphere-to-a-scene" id="markdown-toc-adding-a-uv-sphere-to-a-scene">Adding a UV sphere to a scene</a></li>
+  <li><a href="#creating-materials-and-assigning-them-to-meshes" id="markdown-toc-creating-materials-and-assigning-them-to-meshes">Creating materials and assigning them to meshes</a></li>
+  <li><a href="#further-reading-on-python-api-for-blender" id="markdown-toc-further-reading-on-python-api-for-blender">Further reading on Python API for Blender</a></li>
+  <li><a href="#building-an-addon" id="markdown-toc-building-an-addon">Building an <em>addon</em></a></li>
+  <li><a href="#making-addons-installable" id="markdown-toc-making-addons-installable">Making addons installable</a></li>
+</ol>
+
+<hr />
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>Open a new, default Blender document. Change the Timeline window to a Python Console. You might want to increase the height so you can see more lines at once.</p>
+
+<p>Start out by typing:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">list</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>You should see the three default objects listed:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s">'Camera'</span><span class="p">],</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s">'Cube'</span><span class="p">],</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s">'Light'</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>Now, let’s reference the default cube for convenience:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cube</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s">"Cube"</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Next, we’re going to move the cube, but first we need to import the <code class="highlighter-rouge">mathutils</code> module:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">mathutils</span>
+</code></pre></div></div>
+
+<p>Now we can move the default cube:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cube</span><span class="o">.</span><span class="n">delta_location</span> <span class="o">+=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Keep moving the cube along this trajectory by pressing the [UP] arrow and then pressing [ENTER]. Repeat.</p>
+
+<p>Congratulations, you’ve just started scripting in Blender!</p>
+
+<h2 id="the-bpy-module">The <code class="highlighter-rouge">bpy</code> module</h2>
+
+<p>The <code class="highlighter-rouge">bpy</code> module consists of several submodules:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Submodule</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">bpy.data</code></td>
+      <td style="text-align: left">contents of the current document.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">bpy.types</code></td>
+      <td style="text-align: left">info on types of objects in <code class="highlighter-rouge">bpy.data</code>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">bpy.ops</code></td>
+      <td style="text-align: left"><em>operations</em> perform the actual functions of Blender.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">bpy.context</code></td>
+      <td style="text-align: left">settings such as currect 3D mode, selected objects, etc.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">bpy.props</code></td>
+      <td style="text-align: left">functions for defining <em>properties</em>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="the-mathutils-module">The <code class="highlighter-rouge">mathutils</code> module</h2>
+
+<p>The <code class="highlighter-rouge">mathutils</code> module contains many usesful classes:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Class</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">Vector</code></td>
+      <td style="text-align: left">representation of 2D or 3D coordinates.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">Matrix</code></td>
+      <td style="text-align: left">general way of representing a linear transformation.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">Euler</code></td>
+      <td style="text-align: left">way of representing rotations as a set of <em>Euler angles</em>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">Quaternion</code></td>
+      <td style="text-align: left">another way of representing rotations.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">Color</code></td>
+      <td style="text-align: left">representation of RGB colors and conversion to/from HSV.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="adding-a-uv-sphere-to-a-scene">Adding a UV sphere to a scene</h2>
+
+<p>Clicking the <em>Scripting</em> tab opens a text editor where we can write and execute code. Try copying and pasting the following script:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">bmesh</span>
+
+<span class="c"># Delete all existing objects</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s">'SELECT'</span><span class="p">)</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">use_global</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c"># Create an empty mesh and the object</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Ball"</span><span class="p">)</span>
+<span class="n">ball</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Ball"</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+
+<span class="c"># Add object to scene and select it</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">ball</span><span class="p">)</span>
+<span class="n">ball</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># Construct the UV sphere and assign it to the Blender mesh</span>
+<span class="n">bm</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="n">bmesh</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">create_uvsphere</span><span class="p">(</span><span class="n">bm</span><span class="p">,</span> <span class="n">u_segments</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">v_segments</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">bm</span><span class="o">.</span><span class="n">free</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Then click <em>Run Script</em>. You’ll see the three default objects disappear, replaced by a UV sphere called “Ball”.</p>
+
+<p>With the object still selected, we can reposition the Ball object as follows:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Where <code class="highlighter-rouge">x</code>, <code class="highlighter-rouge">y</code>, and <code class="highlighter-rouge">z</code> correspond to the coordinates in Euclidean space. If we want to use smooth shading (again with the object still selected) we can add:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">shade_smooth</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Let’s modify our script so that we create 50 balls randomly positioned within a 25 by 25 by 25 unit cubic space:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">bmesh</span>
+
+<span class="k">def</span> <span class="nf">add_ball</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Ball"</span><span class="p">)</span>
+    <span class="n">ball</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Ball"</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">ball</span><span class="p">)</span>
+    <span class="n">ball</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">bm</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+    <span class="n">bmesh</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">create_uvsphere</span><span class="p">(</span><span class="n">bm</span><span class="p">,</span> <span class="n">u_segments</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">v_segments</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">free</span><span class="p">()</span>
+    <span class="c"># Reposition the ball</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+    <span class="c"># Apply smooth shading</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">shade_smooth</span><span class="p">()</span>
+    <span class="c"># Deselect the ball</span>
+    <span class="n">ball</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c"># Clear the scene</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s">'SELECT'</span><span class="p">)</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">use_global</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c"># Add 50 balls at random positions within a 25 by 25 by 25 unit cubic space</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+    <span class="n">add_ball</span><span class="p">(</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="creating-materials-and-assigning-them-to-meshes">Creating materials and assigning them to meshes</h2>
+
+<p>To create a new material, called <em>Blue</em>, use the following syntax:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Blue"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>If we want to make <em>Blue</em> reflect its name:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="s">"Blue"</span><span class="p">]</span><span class="o">.</span><span class="n">diffuse_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Say we have an object, <em>obj</em>, and we want to apply to it material <em>Blue</em>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="s">"Blue"</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>Let’s try this in an example! The script below creates three cubes: <em>Cube1</em>, <em>Cube2</em>, and <em>Cube3</em>, each with their own materials: <em>Color1</em>, <em>Color2</em>, <em>Color3</em>, respectively:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">bmesh</span>
+
+<span class="k">def</span> <span class="nf">create_and_apply_material</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+    <span class="n">material_name</span> <span class="o">=</span> <span class="s">"Color{}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">material_name</span><span class="p">)</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">diffuse_color</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="p">(),</span> <span class="n">random</span><span class="p">(),</span> <span class="n">random</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">material_name</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">add_cube</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+    <span class="n">mesh_name</span> <span class="o">=</span> <span class="s">"Cube{}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mesh_name</span><span class="p">)</span>
+    <span class="n">cube</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mesh_name</span><span class="p">,</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">cube</span><span class="p">)</span>
+    <span class="n">cube</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">bm</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+    <span class="n">bmesh</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">create_cube</span><span class="p">(</span><span class="n">bm</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+    <span class="n">bm</span><span class="o">.</span><span class="n">free</span><span class="p">()</span>
+    
+    <span class="c"># Resize the mesh</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    
+    <span class="c"># Reposition the cube</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+    
+    <span class="c"># Call create_and_apply_material</span>
+    <span class="n">create_and_apply_material</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>    
+
+    <span class="c"># Deselect the ball</span>
+    <span class="n">cube</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c"># Clear the scene</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s">'SELECT'</span><span class="p">)</span>
+<span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="nb">object</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">use_global</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c"># Add 3 cubes with randomly-colored materials</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">add_cube</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="further-reading-on-python-api-for-blender">Further reading on Python API for Blender</h2>
+
+<p>To learn more about the Python API for Blender, please see the <a href="https://docs.blender.org/api/current/">this link</a>. Note: this hasn’t been updated for Blender-2.8 so if you have specific questions, feel free to e-mail me at a.r.kaija@gmail.com and I’ll try to help!</p>
+
+<h2 id="building-an-addon">Building an <em>addon</em></h2>
+
+<p><em>Addons</em> are Python scripts that extend Blender’s functionality. They can reside in two places:</p>
+
+<ol>
+  <li>
+    <p>A file within the Blender user preferences directory: in this case the addon needs to be <em>enabled</em> in each Blender document where it is to be used, by ticking its checkbox in the Add-Ons list in the User Preferences window.</p>
+  </li>
+  <li>
+    <p>A text block within the Blender document: in this case the script can be run by clicking <em>Run Script</em> in the Text Editor window, or by ticking the <em>Register</em> checkbox in the Text Editor window.</p>
+  </li>
+</ol>
+
+<p>Typically, an addon script defines one or more new <em>operators</em>, as a subclass of the <code class="highlighter-rouge">bpy.types.Operator</code> class. Your class must be given a unique name within the document. An operator must have a <code class="highlighter-rouge">bl_idname</code> attribute, giving the operator a name, and a <code class="highlighter-rouge">bl_label</code>, giving it a user-visible name in the F3 menu. The <code class="highlighter-rouge">bl_idname</code> has the following format, for example for the built-in operator to add a cube:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mesh</span><span class="o">.</span><span class="n">primitive_cube_add</span>
+</code></pre></div></div>
+
+<p>Where the part to the left of the single dot is a valid name for a category of operators, which can be found by entering the following in the Python console:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">dir</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now we’ll demonstrate how to define an operator that adds a new tetrahedron object to the scene. Our class definition might look something like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AddTetrahedron</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Operator</span><span class="p">):</span>
+    <span class="n">bl_idname</span> <span class="o">=</span> <span class="s">"mesh.add_tetrahedron"</span>
+    <span class="n">bl_label</span> <span class="o">=</span> <span class="s">"Add Tetrahedron"</span>
+</code></pre></div></div>
+
+<p>The class must define an <code class="highlighter-rouge">invoke</code> method like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">invoke</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+</code></pre></div></div>
+
+<p>Where the <code class="highlighter-rouge">invoke</code> method carries out the actual function of the operator. After it finishes, it must return a set of strings, telling Blender that the operation has finished. We’ll end our <code class="highlighter-rouge">invoke</code> method like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="p">{</span><span class="s">"FINISHED"</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>We won’t get into explaining the details about how the geometry works, but first we use the <code class="highlighter-rouge">mathutils</code> module to define the vertices of our mesh:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">Vector</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="n">Vector</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="n">Vector</span><span class="p">((</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)),</span>
+            <span class="n">Vector</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))),]</span>
+</code></pre></div></div>
+
+<p>Then we create a mesh:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">new_mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Tetrahedron"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Then fill the mesh with the vertices definitions and resulting faces:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>new_mesh.from_pydata(vertices, [], [[0, 1, 2], [0, 1, 3], [1, 2, 3], [2, 0, 3]])
+</code></pre></div></div>
+
+<p>Where <code class="highlighter-rouge">mesh.from_pydata</code> takes three arguments:</p>
+
+<ol>
+  <li>
+    <p>A list of <code class="highlighter-rouge">Vector</code>s defining the vertices.</p>
+  </li>
+  <li>
+    <p>A list of edge definitions.</p>
+  </li>
+  <li>
+    <p>A list of face definitions.</p>
+  </li>
+</ol>
+
+<p>Edges or faces are defined as lists of vertex indices - in this example we have four faces, each defined by three vertices. <strong>You can either pass the edge definitions or the face definitions, but not both.</strong> This is why we’ve passed an empty list for the edge definitions.</p>
+
+<p>Since we’ve changed the mesh we need to update it:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">new_mesh</span><span class="o">.</span><span class="n">update</span>
+</code></pre></div></div>
+
+<p>And create and object and link it to the scene as we did in our previous examples. Putting everything together:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Vector</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+
+<span class="k">class</span> <span class="nc">AddTetrahedron</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Operator</span><span class="p">):</span>
+    <span class="n">bl_idname</span> <span class="o">=</span> <span class="s">"mesh.add_tetrahedron"</span>
+    <span class="n">bl_label</span> <span class="o">=</span> <span class="s">"Add Tetrahedron"</span>
+
+    <span class="k">def</span> <span class="nf">invoke</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">Vector</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="n">Vector</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="n">Vector</span><span class="p">((</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="n">Vector</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))),]</span>
+        <span class="n">new_mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Tetrahedron"</span><span class="p">)</span>
+        <span class="n">new_mesh</span><span class="o">.</span><span class="n">from_pydata</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+        <span class="n">new_mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">new_object</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Tetrahedron"</span><span class="p">,</span> <span class="n">new_mesh</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">new_object</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">"FINISHED"</span><span class="p">}</span>
+
+<span class="n">bpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">AddTetrahedron</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The call to <code class="highlighter-rouge">register_class</code> adds the operator to Blender’s built-in collection. Try copying the code above in to the Blender text editor and clicking <code class="highlighter-rouge">Run Script</code>. Then press F3 to search for the addon, typing “tetra” - the <em>Add Tetrahedron</em> addon should appear, congratulations!</p>
+
+<h2 id="making-addons-installable">Making addons installable</h2>
+
+<p>To make an addon installable, first we need to define a global called <code class="highlighter-rouge">bl_info</code>, a Python dictionary. Make sure to enter <code class="highlighter-rouge">"blender" : (2, 80, 0)</code>! Here’s an example:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bl_info</span> <span class="o">=</span> <span class="p">{</span><span class="s">"name"</span> <span class="p">:</span> <span class="s">"Add Tetrahedron"</span><span class="p">,</span>
+           <span class="s">"author"</span> <span class="p">:</span> <span class="s">"John Doe &lt;john.doe@example.com&gt;"</span><span class="p">,</span>
+           <span class="s">"location"</span> <span class="p">:</span> <span class="s">"View3D &gt; Add &gt; Mesh &gt; Generate"</span><span class="p">,</span>
+           <span class="s">"version"</span> <span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+           <span class="s">"blender"</span> <span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+           <span class="s">"description"</span> <span class="p">:</span> <span class="s">"Add a tetrahedron mesh"</span><span class="p">,</span>
+           <span class="s">"category"</span> <span class="p">:</span> <span class="s">"Add Mesh"</span><span class="p">,}</span>
+</code></pre></div></div>
+
+<p>Then, we need to reformat our call to <code class="highlighter-rouge">bpy.utils.register_class</code> as follows:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">AddTetrahedron</span><span class="p">,)</span>
+
+<span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">unregister</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">cls</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">classes</span><span class="p">):</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">unregister_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Putting it all together:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bl_info</span> <span class="o">=</span> <span class="p">{</span><span class="s">"name"</span> <span class="p">:</span> <span class="s">"Add Tetrahedron"</span><span class="p">,</span>
+           <span class="s">"author"</span> <span class="p">:</span> <span class="s">"John Doe &lt;john.doe@example.com&gt;"</span><span class="p">,</span>
+           <span class="s">"location"</span> <span class="p">:</span> <span class="s">"View3D &gt; Add &gt; Mesh &gt; Generate"</span><span class="p">,</span>
+           <span class="s">"version"</span> <span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+           <span class="s">"blender"</span> <span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+           <span class="s">"description"</span> <span class="p">:</span> <span class="s">"Add a tetrahedron mesh"</span><span class="p">,</span>
+           <span class="s">"category"</span> <span class="p">:</span> <span class="s">"Add Mesh"</span><span class="p">,}</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Vector</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+
+<span class="k">class</span> <span class="nc">AddTetrahedron</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Operator</span><span class="p">):</span>
+    <span class="n">bl_idname</span> <span class="o">=</span> <span class="s">"mesh.add_tetrahedron"</span>
+    <span class="n">bl_label</span> <span class="o">=</span> <span class="s">"Add Tetrahedron"</span>
+
+    <span class="k">def</span> <span class="nf">invoke</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span><span class="n">Vector</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="n">Vector</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="n">Vector</span><span class="p">((</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="n">Vector</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">))),]</span>
+        <span class="n">new_mesh</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meshes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Tetrahedron"</span><span class="p">)</span>
+        <span class="n">new_mesh</span><span class="o">.</span><span class="n">from_pydata</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+        <span class="n">new_mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">new_object</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">"Tetrahedron"</span><span class="p">,</span> <span class="n">new_mesh</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">new_object</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">"FINISHED"</span><span class="p">}</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="p">(</span><span class="n">AddTetrahedron</span><span class="p">,)</span>
+
+<span class="k">def</span> <span class="nf">register</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">cls</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">unregister</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">cls</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">classes</span><span class="p">):</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">unregister_class</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Try saving the code above into a <code class="highlighter-rouge">.py</code> file, then install the addon:</p>
+
+<ol>
+  <li>
+    <p>Open Blender.</p>
+  </li>
+  <li>
+    <p>Click <em>Edit</em> &gt; <em>Preferences</em>.</p>
+  </li>
+  <li>
+    <p>Click the <em>Add-ons</em> tab.</p>
+  </li>
+  <li>
+    <p>Click <em>Install…</em> and then select the file you saved earlier.</p>
+  </li>
+  <li>
+    <p>Enable the addon by ticking the box next to its name, for this example: <em>Add Mesh: Add Tetrahedron</em>.</p>
+  </li>
+</ol>
+
+<p>And that’s it! Congratulations, you’re now ready to start building your own addons for Blender-2.8!</p>
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
