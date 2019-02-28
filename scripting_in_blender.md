@@ -217,6 +217,87 @@ for i in range(3):
     add_cube(i * 2, i * 2, i * 2, i)
 ```
 
+## Using modifiers and rendering a scene
+
+Here's an example where we add a monkey to an empty scence and apply a few modifiers. Then we add a camera, point it at the monkey, and render the scene.
+
+To apply the modifiers, after we add the monkey mesh to the scene:
+
+```python
+bpy.ops.object.modifier_add(type='SUBSURF')
+bpy.ops.object.modifier_add(type='WIREFRAME')
+```
+
+This will apply a subsurface and wireframe modifier to the monkey mesh.
+
+Next, we need to add a light source:
+
+```python
+bpy.ops.object.light_add(type='POINT', location=(2, 2, 2))
+```
+
+Then a camera:
+
+```python
+bpy.ops.object.camera_add(location=(-4, -5, 2))
+bpy.context.scene.camera = bpy.data.objects["Camera"]
+```
+
+Then we'll add a constraint to the camera so that it points at the monkey (recall that by default Blender names monkeys `Suzanne`):
+
+```python
+bpy.ops.object.constraint_add(type="TRACK_TO")
+bpy.context.object.constraints["Track To"].target = bpy.data.objects["Suzanne"]
+bpy.context.object.constraints["Track To"].track_axis = "TRACK_NEGATIVE_Z"
+bpy.context.object.constraints["Track To"].up_axis = "UP_Y"
+```
+
+Finally, we can render the scene:
+
+```python
+bpy.data.scenes["Scene"].render.filepath = "render.png"
+bpy.ops.render.render(write_still=True)
+```
+
+Putting it all together:
+
+```python
+import bpy
+import bmesh
+
+# Clear the scene
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+# Add a monkey
+bpy.ops.mesh.primitive_monkey_add()
+
+# Apply some modifiers
+bpy.ops.object.modifier_add(type='SUBSURF')
+bpy.ops.object.modifier_add(type='WIREFRAME')
+
+# Add a light source
+bpy.ops.object.light_add(type='POINT', location=(2, 2, 2))
+
+# Change background to black
+bpy.context.scene.world.use_nodes = False
+bpy.context.scene.world.color = (0, 0, 0)
+
+# Add a camera
+bpy.ops.object.camera_add(location=(-4, -5, 2))
+bpy.context.scene.camera = bpy.data.objects["Camera"]
+
+# Point camera at the monkey
+bpy.ops.object.constraint_add(type="TRACK_TO")
+bpy.context.object.constraints["Track To"].target = bpy.data.objects["Suzanne"]
+bpy.context.object.constraints["Track To"].track_axis = "TRACK_NEGATIVE_Z"
+bpy.context.object.constraints["Track To"].up_axis = "UP_Y"
+
+# Render scene
+bpy.data.scenes["Scene"].render.filepath = "render.png"
+bpy.ops.render.render(write_still=True)
+```
+
 ## Further reading on Python API for Blender
 
 To learn more about the Python API for Blender, please see the [this link](https://docs.blender.org/api/current/). Note: this hasn't been updated for Blender-2.8 so if you have specific questions, feel free to e-mail me at a.r.kaija@gmail.com and I'll try to help!
