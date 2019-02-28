@@ -300,7 +300,7 @@ bpy.ops.render.render(write_still=True)
 
 ## Further reading on Python API for Blender
 
-To learn more about the Python API for Blender, please see the [this link](https://docs.blender.org/api/current/). Note: this hasn't been updated for Blender-2.8 so if you have specific questions, feel free to e-mail me at a.r.kaija@gmail.com and I'll try to help!
+To learn more about the Python API for Blender, please see the [this link](https://docs.blender.org/api/current/). Note: this hasn't been updated for Blender-2.8 so if you have specific questions, feel free to e-mail me at `a.r.kaija@gmail.com` and I'll try to help!
 
 ## Building an _addon_
 
